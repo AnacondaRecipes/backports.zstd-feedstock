@@ -54,7 +54,7 @@ outputs:
   - package:
       name: backports.zstd
     build:
-      skip: not (target_platform == "linux-64" and match(python, "3.14.*") not match(python, "3.14.*t"))
+      skip: not (target_platform == "linux-64" and match(python, "3.14.*") and ("cp314t" not in python))
       noarch: generic
     requirements:
       run:
