@@ -1,0 +1,56 @@
+{% set name = "backports.zstd" %}
+{% set version = "1.1.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace(".", "_") }}-{{ version }}.tar.gz
+  sha256: 8ce84125e3094ddefbaa25306e8949965ce092b400a1fd63b5e6a5e932d2994f
+
+build:
+  number: 0
+  skip: true  # [py<39 or py>=314]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --config-settings=--build-option=--system-zstd --disable-pip-version-check
+
+requirements:
+  build:
+    - {{ stdlib("c") }}
+    - {{ compiler("c") }}
+  host:
+    - pip
+    - python
+    - setuptools >=80
+    - zstd {{ zstd }}
+  run:
+    - python
+    - zstd
+
+test:
+  source_files:
+    - tests
+  imports: 
+    - backports.zstd
+  requires:
+    - pip
+    - pytest
+  commands:
+    - pip check
+    - pytest -v tests
+
+about:
+  home: https://github.com/rogdham/backports.zstd
+  license: PSF-2.0
+  license_family: PSF
+  license_file: LICENSE.txt
+  summary: Backport of compression.zstd
+  description: Backport of compression.zstd
+  doc_url: https://github.com/rogdham/backports.zstd
+  dev_url: https://github.com/rogdham/backports.zstd
+
+extra:
+  feedstock-name: backports.zstd
+  recipe-maintainers:
+    - rogdham
+    - bollwyvl
